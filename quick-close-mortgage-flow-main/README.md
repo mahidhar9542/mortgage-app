@@ -1,8 +1,145 @@
-# Welcome to your Lovable project
+# Quick Close Mortgage Application
 
-## Project info
+A modern mortgage application with secure authentication and loan management features.
 
-**URL**: https://lovable.dev/projects/3b334be0-8f8d-4240-a3b7-4ebc1bb8a375
+## Features
+
+- 🔐 Secure authentication with email/password
+- ✉️ Password reset via email
+- 👥 Role-based access control
+- 📱 Responsive design
+- 🚀 Built with Next.js, TypeScript, and Tailwind CSS
+- 🔄 Real-time updates
+- 📧 Email notifications
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory and add the following variables:
+
+```env
+# MongoDB
+MONGODB_URI=mongodb://127.0.0.1:27017/mortgage-app
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here
+
+# Email Configuration
+EMAIL_FROM=noreply@quickclosemortgage.com
+
+# SMTP Configuration (for production)
+# SMTP_HOST=smtp.your-email-provider.com
+# SMTP_PORT=587
+# SMTP_SECURE=false # true for 465, false for other ports
+# SMTP_USER=your-email@example.com
+# SMTP_PASSWORD=your-email-password
+```
+
+For development, you can use [Ethereal Email](https://ethereal.email/) for testing email functionality. No configuration is needed for development - emails will be captured by ethereal.email and you can view them in their web interface.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16.x or later
+- npm 7.x or later
+- MongoDB (local or cloud instance)
+
+### Quick Start
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd quick-close-mortgage-flow
+   ```
+
+2. Run the setup script (Linux/macOS):
+   ```bash
+   ./setup.sh
+   ```
+   
+   Or on Windows (using Git Bash or WSL):
+   ```bash
+   bash setup.sh
+   ```
+
+3. The setup script will:
+   - Check for Node.js and npm
+   - Install dependencies
+   - Create a `.env.local` file with default configuration
+   - Verify MongoDB connection (if installed)
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+### Manual Setup
+
+If you prefer to set up manually:
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Create a `.env.local` file in the root directory (copy from `.env.example` and update values)
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Authentication
+
+The application includes the following authentication features:
+
+- **Sign Up**: Create a new account with email and password
+- **Sign In**: Log in with your credentials
+- **Forgot Password**: Request a password reset link
+- **Reset Password**: Set a new password using a secure token
+- **Protected Routes**: Certain routes require authentication
+- **Role-Based Access**: Different user roles have different permissions
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start the development server with hot reload
+- `npm run build` - Build the application for production
+- `npm start` - Start the production server
+- `npm run lint` - Run ESLint for code quality
+- `npm run format` - Format code with Prettier
+- `npm test` - Run tests (coming soon)
+
+### Testing Email in Development
+
+During development, you can test the email functionality using [Ethereal Email](https://ethereal.email/). The application is pre-configured to use Ethereal in development mode.
+
+1. Start the development server
+2. Trigger an email (e.g., password reset)
+3. Check your Ethereal inbox at [https://ethereal.email/messages](https://ethereal.email/messages)
+   - Username and password will be logged in the console when the server starts
+
+### Database
+
+The application uses MongoDB as the database. You can use:
+
+- Local MongoDB instance (default)
+- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (cloud)
+- Any other MongoDB-compatible database
+
+Update the `MONGODB_URI` in your `.env.local` file to point to your database.
+
+## Deployment
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-docs) from the creators of Next.js.
+
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## How can I edit this code?
 

@@ -1,8 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calculator, User, Menu, Phone, FileText, TrendingUp } from 'lucide-react';
+import { Calculator, User, Menu, Phone, ChevronDown, LogIn, UserPlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Header = () => {
   return (
@@ -39,13 +45,37 @@ const Header = () => {
               <Phone className="w-4 h-4 mr-2" />
               (555) 123-LOAN
             </Button>
-            <Button variant="ghost" size="sm" className="flex items-center">
-              <User className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
-            <Button size="sm" className="bg-[#0054ff] hover:bg-blue-600 text-white">
-              Get Started
-            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center">
+                  <User className="w-4 h-4 mr-2" />
+                  Account
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <Link to="/auth/signin">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/auth/signup">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Create Account
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Link to="/auth/signup">
+              <Button size="sm" className="bg-[#0054ff] hover:bg-blue-600 text-white">
+                Get Started
+              </Button>
+            </Link>
+            
             <Button variant="ghost" size="sm" className="md:hidden">
               <Menu className="w-4 h-4" />
             </Button>
