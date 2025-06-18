@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Head from 'next/head';
+import { Helmet } from 'react-helmet-async';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -14,11 +14,11 @@ export default function AuthLayout({
 }: AuthLayoutProps) {
   return (
     <>
-      <Head>
+      <Helmet>
         <title>{`${title} | Quick Close Mortgage`}</title>
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Helmet>
       
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

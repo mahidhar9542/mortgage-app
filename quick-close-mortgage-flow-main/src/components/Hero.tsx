@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,6 +10,7 @@ const Hero = () => {
   const [loanAmount, setLoanAmount] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [estimatedPayment, setEstimatedPayment] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const calculatePayment = () => {
     if (homeValue && loanAmount) {
@@ -64,11 +66,20 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-[#0054ff] hover:bg-blue-600 text-lg px-8 py-6">
+              <Button 
+                size="lg" 
+                className="bg-[#0054ff] hover:bg-blue-600 text-lg px-8 py-6"
+                onClick={() => navigate('/apply-now')}
+              >
                 Start Application
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-8 py-6"
+                onClick={() => navigate('/rates')}
+              >
                 View Current Rates
               </Button>
             </div>

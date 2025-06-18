@@ -1,0 +1,69 @@
+<% include('emails/base', { 
+  title: 'New Lead Notification',
+  preview: `New lead received: ${lead.firstName} ${lead.lastName}`
+}); %>
+
+<h2>New Lead Received</h2>
+
+<p>You have received a new lead from the mortgage application form. Here are the details:</p>
+
+<div style="background-color: #f8fafc; padding: 20px; border-radius: 4px; margin: 20px 0;">
+  <h3 style="margin-top: 0; color: #2d3748;">Lead Information</h3>
+  
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Name:</div>
+    <div style="flex: 2;"><%= lead.firstName %> <%= lead.middleName || '' %> <%= lead.lastName %></div>
+  </div>
+  
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Contact:</div>
+    <div style="flex: 2;">
+      <div><a href="mailto:<%= lead.email %>"><%= lead.email %></a></div>
+      <div><a href="tel:<%= lead.phone %>"><%= lead.phone %></a></div>
+    </div>
+  </div>
+  
+  <% if (lead.propertyAddress) { %>
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Property:</div>
+    <div style="flex: 2;">
+      <%= lead.propertyAddress.street %><br>
+      <%= lead.propertyAddress.city %>, <%= lead.propertyAddress.state %> <%= lead.propertyAddress.zipCode %>
+    </div>
+  </div>
+  <% } %>
+  
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Loan Details:</div>
+    <div style="flex: 2;">
+      <div><strong>Purpose:</strong> <%= lead.loanPurpose || 'N/A' %></div>
+      <div><strong>Amount:</strong> $<%= lead.loanAmount ? lead.loanAmount.toLocaleString() : 'N/A' %></div>
+      <div><strong>Property Type:</strong> <%= lead.propertyType || 'N/A' %></div>
+    </div>
+  </div>
+  
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Financials:</div>
+    <div style="flex: 2;">
+      <div><strong>Credit Score:</strong> <%= lead.creditScore || 'N/A' %></div>
+      <div><strong>Annual Income:</strong> $<%= lead.annualIncome ? lead.annualIncome.toLocaleString() : 'N/A' %></div>
+    </div>
+  </div>
+  
+  <div style="display: flex; margin-bottom: 15px;">
+    <div style="flex: 1; font-weight: bold;">Submission:</div>
+    <div style="flex: 2;">
+      <div><strong>Date:</strong> <%= new Date(lead.createdAt).toLocaleString() %></div>
+      <div><strong>Source:</strong> <%= lead.source || 'Website' %></div>
+      <div><strong>IP Address:</strong> <%= lead.ipAddress || 'N/A' %></div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= lead.leadUrl %>" class="btn btn-primary">View Full Lead Details</a>
+</div>
+
+<p>This lead has been automatically assigned a <strong><%= lead.status || 'New' %></strong> status in the system.</p>
+
+<p>Best regards,<br>The <%= companyName %> Team</p>

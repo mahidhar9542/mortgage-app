@@ -1,27 +1,38 @@
-
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useEffect } from 'react';
-
-// Context
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-
-// Pages
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'react-hot-toast';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { RatesProvider } from '@/contexts/RatesContext';
+import { ApplicationProvider } from '@/contexts/ApplicationContext';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import PublicRoute from '@/components/PublicRoute';
 import Index from "./pages/Index";
-import Apply from "./pages/Apply";
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound";
+import ApplyNow from "./pages/ApplyNow";
+import ThankYou from "./pages/ThankYou";
 import SignIn from "./pages/auth/signin";
 import SignUp from "./pages/auth/signup";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
+import NotFound from "./pages/NotFound";
+import RatesPage from "./pages/RatesPage";
+import ApplicationSubmitted from "./pages/ApplicationSubmitted";
 
 const queryClient = new QueryClient();
 
-// Protected Route Component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+function AppContent() {
+  return (
+    <div className="min-h-screen bg-background">
+      <AppRoutes />
+      <Toaster position="top-right" />
+    </div>
+  );
+}
+
+function AppRoutes() {
   const { user, loading } = useAuth();
-  const location = useLocation();
 
   if (loading) {
     return (
@@ -31,71 +42,92 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth/signin" state={{ from: location }} replace />;
-  }
-  
-  return <>{children}</>;
-};
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Index />} />
+      <Route path="/apply" element={<ApplyNow />} />
+      <Route path="/thank-you" element={<ThankYou />} />
+      
+      {/* Auth Routes */}
+      <Route path="/auth/signin" element={
+        <PublicRoute>
+          <SignIn />
+        </PublicRoute>
+      } />
+      
+      <Route path="/auth/signup" element={
+        <PublicRoute>
+          <SignUp />
+        </PublicRoute>
+      } />
+      
+      <Route path="/auth/forgot-password" element={
+        <PublicRoute>
+          <ForgotPassword />
+        </PublicRoute>
+      } />
+      
+      <Route path="/auth/reset-password" element={
+        <PublicRoute>
+          <ResetPassword />
+        </PublicRoute>
+      } />
+      
+      {/* Application Flow */}
+      <Route path="/apply-now" element={
+        <ApplicationProvider>
+          <ApplyNow />
+        </ApplicationProvider>
+      } />
+      
+      <Route path="/application-submitted" element={
+        <ApplicationProvider>
+          <ApplicationSubmitted />
+        </ApplicationProvider>
+      } />
+      
+      {/* Protected Routes */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/rates" element={
+        <ProtectedRoute>
+          <RatesPage />
+        </ProtectedRoute>
+      } />
+      
+      {/* 404 Not Found */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
 
-// Public Route Component
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  const location = useLocation();
-
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-      </div>
-    );
-  }
-
-  if (user) {
-    const from = location.state?.from?.pathname || '/dashboard';
-    return <Navigate to={from} replace />;
-  }
-  
-  return <>{children}</>;
-};
-
-const App = () => (
-  <AuthProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/apply" element={<Apply />} />
-          <Route 
-            path="/auth/signin" 
-            element={
-              <PublicRoute>
-                <SignIn />
-              </PublicRoute>
-            } 
-          />
-          <Route 
-            path="/auth/signup" 
-            element={
-              <PublicRoute>
-                <SignUp />
-              </PublicRoute>
-            } 
-          />
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </AuthProvider>
-);
+function App() {
+  return (
+    <Router>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RatesProvider>
+            <TooltipProvider>
+              <ApplicationProvider>
+                <AppContent />
+              </ApplicationProvider>
+            </TooltipProvider>
+          </RatesProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </Router>
+  );
+}
 
 export default App;

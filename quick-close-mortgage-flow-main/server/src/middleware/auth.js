@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const auth = (req, res, next) => {
+const protect = (req, res, next) => {
   try {
     // Get token from header or cookie
     let token = req.header('Authorization') || req.cookies.token;
@@ -32,4 +32,10 @@ const auth = (req, res, next) => {
   }
 };
 
-export default auth;
+const admin = (req, res, next) => {
+  // Add admin check logic here if needed
+  next();
+};
+
+export default protect;
+export { admin };

@@ -1,0 +1,72 @@
+<% include('emails/base', { 
+  title: 'Action Required: Additional Documents Needed',
+  preview: `Please submit the requested documents to continue with your mortgage application.`
+}); %>
+
+<h2>Action Required: Additional Documents Needed</h2>
+
+<p>Dear <%= lead.firstName %>,</p>
+
+<p>To continue processing your mortgage application, we need some additional documents. Please review the list below and submit the requested items by <strong><%= deadline %></strong>.</p>
+
+<div style="background-color: #fff5f5; border-left: 4px solid #f56565; padding: 15px; margin: 20px 0; border-radius: 0 4px 4px 0;">
+  <h3 style="margin-top: 0; color: #c53030;">Required Documents</h3>
+  <p style="margin-bottom: 10px;">Please submit the following documents to complete your application:</p>
+  
+  <ul style="margin: 0; padding-left: 20px;">
+    <% documents.forEach(function(doc) { %>
+      <li style="margin-bottom: 8px; position: relative; padding-left: 25px;">
+        <% if (doc.isUploaded) { %>
+          <span style="color: #38a169; position: absolute; left: 0;">✓</span>
+          <span style="text-decoration: line-through; color: #718096;"><%= doc.name %></span>
+          <span style="color: #38a169; font-size: 13px; margin-left: 8px;">(Received)</span>
+        <% } else { %>
+          <span style="color: #e53e3e; position: absolute; left: 0;">•</span>
+          <span><%= doc.name %></span>
+        <% } %>
+      </li>
+    <% }); %>
+  </ul>
+  
+  <p style="margin: 15px 0 0 0; font-size: 14px; color: #e53e3e;">
+    <strong>Deadline:</strong> <%= deadline %>
+  </p>
+</div>
+
+<div style="background-color: #f8fafc; padding: 20px; border-radius: 4px; margin: 20px 0;">
+  <h3 style="margin-top: 0; color: #2d3748;">How to Submit Documents</h3>
+  
+  <div style="display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;">
+    <div style="background-color: #ebf8ff; color: #3182ce; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; font-weight: bold;">1</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #2d3748;">Prepare Your Documents</h4>
+      <p style="margin: 0; color: #4a5568; font-size: 14px;">Gather all requested documents. Make sure they are clear and legible.</p>
+    </div>
+  </div>
+  
+  <div style="display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;">
+    <div style="background-color: #ebf8ff; color: #3182ce; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; font-weight: bold;">2</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #2d3748;">Upload Your Documents</h4>
+      <p style="margin: 0; color: #4a5568; font-size: 14px;">Use our secure portal to upload your documents.</p>
+    </div>
+  </div>
+  
+  <div style="display: flex;">
+    <div style="background-color: #ebf8ff; color: #3182ce; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; font-weight: bold;">3</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #2d3748;">Submit for Review</h4>
+      <p style="margin: 0; color: #4a5568; font-size: 14px;">Once uploaded, our team will review your documents.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= uploadUrl %>" class="btn btn-primary">Upload Documents Now</a>
+</div>
+
+<p>If you have any questions about the required documents or need assistance with the upload process, please don't hesitate to contact our support team at <a href="mailto:<%= companyEmail %>" style="color: #3182ce; text-decoration: none;"><%= companyEmail %></a> or call us at <a href="tel:<%= companyPhone.replace(/[^0-9+]/g, '') %>" style="color: #3182ce; text-decoration: none;"><%= companyPhone %></a>.</p>
+
+<p>Thank you for your prompt attention to this matter.</p>
+
+<p>Best regards,<br>The <%= companyName %> Team</p>

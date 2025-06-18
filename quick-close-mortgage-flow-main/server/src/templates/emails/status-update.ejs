@@ -1,0 +1,169 @@
+<% 
+const statusTitles = {
+  'pre-approved': 'Pre-Approval Notice',
+  'approved': 'Application Approved!',
+  'documents-requested': 'Additional Documents Required',
+  'under-review': 'Application Under Review',
+  'denied': 'Application Decision',
+  'closed': 'Application Closed'
+};
+
+const statusIcons = {
+  'pre-approved': '🎉',
+  'approved': '✅',
+  'documents-requested': '📄',
+  'under-review': '🔍',
+  'denied': '❌',
+  'closed': '🔒'
+};
+
+const statusColors = {
+  'pre-approved': '#38a169',
+  'approved': '#2f855a',
+  'documents-requested': '#d69e2e',
+  'under-review': '#3182ce',
+  'denied': '#e53e3e',
+  'closed': '#718096'
+};
+
+const statusMessages = {
+  'pre-approved': 'Great news! Your mortgage application has been pre-approved!',
+  'approved': 'Congratulations! Your mortgage application has been approved!',
+  'documents-requested': 'We need some additional information to process your application.',
+  'under-review': 'Your application is currently being reviewed by our team.',
+  'denied': 'We\'ve reviewed your application, and unfortunately, we\'re unable to approve it at this time.',
+  'closed': 'Your application has been closed.'
+};
+
+const nextSteps = {
+  'pre-approved': [
+    'Review your loan terms and conditions',
+    'Submit any remaining required documents',
+    'Schedule a call with your loan officer to discuss next steps'
+  ],
+  'approved': [
+    'Review your final loan documents',
+    'Schedule your closing appointment',
+    'Prepare for your closing by gathering required identification'
+  ],
+  'documents-requested': [
+    'Check your email for a separate document request',
+    'Upload the requested documents through our secure portal',
+    'Contact us if you have any questions about the required documents'
+  ],
+  'under-review': [
+    'Monitor your email for any update requests',
+    'Ensure all previously submitted documents are complete',
+    'Your loan officer may contact you with additional questions'
+  ],
+  'denied': [
+    'Review the reasons for denial in your application portal',
+    'Contact us if you have questions about the decision',
+    'You may be able to reapply in the future'
+  ],
+  'closed': [
+    'Contact us if you believe this was done in error',
+    'You may need to submit a new application if you wish to reapply',
+    'Check your email for more details about the closure'
+  ]
+};
+
+const title = statusTitles[status] || 'Application Status Update';
+const icon = statusIcons[status] || 'ℹ️';
+const color = statusColors[status] || '#3182ce';
+const statusMessage = statusMessages[status] || 'There has been an update to your application status.';
+const steps = nextSteps[status] || [];
+%>
+
+<% include('emails/base', { 
+  title: title,
+  preview: statusMessage
+}); %>
+
+<div style="text-align: center; margin-bottom: 30px;">
+  <div style="font-size: 48px; margin-bottom: 15px;"><%= icon %></div>
+  <h1 style="margin: 0 0 10px 0; color: <%= color %>;"><%= title %></h1>
+  <p style="font-size: 18px; color: #4a5568; max-width: 600px; margin: 0 auto;"><%= statusMessage %></p>
+</div>
+
+<div style="background-color: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0;">
+  <h3 style="margin-top: 0; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Application Details</h3>
+  
+  <div style="display: flex; flex-wrap: wrap; margin: 0 -15px;">
+    <div style="flex: 1; min-width: 200px; padding: 0 15px; margin-bottom: 15px;">
+      <div style="color: #718096; font-size: 14px; margin-bottom: 5px;">Application Number</div>
+      <div style="font-weight: 500;">#<%= lead._id.toString().slice(-8).toUpperCase() %></div>
+    </div>
+    
+    <div style="flex: 1; min-width: 200px; padding: 0 15px; margin-bottom: 15px;">
+      <div style="color: #718096; font-size: 14px; margin-bottom: 5px;">Status</div>
+      <div>
+        <span style="display: inline-block; background-color: <%= color %>20; color: <%= color %>; padding: 3px 10px; border-radius: 12px; font-size: 13px; font-weight: 500;">
+          <%= status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %>
+        </span>
+      </div>
+    </div>
+    
+    <div style="flex: 1; min-width: 200px; padding: 0 15px; margin-bottom: 15px;">
+      <div style="color: #718096; font-size: 14px; margin-bottom: 5px;">Date Submitted</div>
+      <div><%= new Date(lead.createdAt).toLocaleDateString() %></div>
+    </div>
+    
+    <div style="flex: 1; min-width: 200px; padding: 0 15px; margin-bottom: 15px;">
+      <div style="color: #718096; font-size: 14px; margin-bottom: 5px;">Loan Officer</div>
+      <div><%= lead.assignedTo?.name || 'Not yet assigned' %></div>
+    </div>
+  </div>
+</div>
+
+<% if (message) { %>
+<div style="background-color: #fffaf0; border-left: 4px solid #ed8936; padding: 15px; margin: 20px 0; border-radius: 0 4px 4px 0;">
+  <h4 style="margin-top: 0; color: #9c4221;">Important Message</h4>
+  <p style="margin: 0; color: #9c4221;"><%= message %></p>
+</div>
+<% } %>
+
+<% if (steps.length > 0) { %>
+<div style="margin: 30px 0;">
+  <h3 style="margin-top: 0; color: #2d3748; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">Next Steps</h3>
+  
+  <div style="margin-top: 15px;">
+    <% steps.forEach((step, index) => { %>
+      <div style="display: flex; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #edf2f7;">
+        <div style="background-color: #ebf8ff; color: #3182ce; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; font-weight: bold; font-size: 14px;">
+          <%= index + 1 %>
+        </div>
+        <div style="padding-top: 3px;">
+          <%= step %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+<% } %>
+
+<div style="text-align: center; margin: 40px 0 20px;">
+  <a href="<%= appUrl %>/dashboard" class="btn" style="background-color: <%= color %>; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; display: inline-block; margin: 0 5px 10px;">
+    View Application Status
+  </a>
+  
+  <% if (status === 'documents-requested') { %>
+    <a href="<%= appUrl %>/documents/upload" class="btn" style="background-color: #38a169; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; display: inline-block; margin: 0 5px 10px;">
+      Upload Documents
+    </a>
+  <% } %>
+  
+  <a href="mailto:<%= companyEmail %>" class="btn" style="background-color: #4a5568; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; display: inline-block; margin: 0 5px 10px;">
+    Contact Support
+  </a>
+</div>
+
+<p style="text-align: center; color: #718096; font-size: 14px; margin-top: 30px;">
+  This is an automated message. Please do not reply to this email. If you have any questions, please contact our support team.
+</p>
+
+<p style="text-align: center;">
+  <a href="<%= appUrl %>/preferences" style="color: #718096; text-decoration: none; font-size: 13px;">Update email preferences</a> | 
+  <a href="<%= appUrl %>/privacy" style="color: #718096; text-decoration: none; font-size: 13px; margin: 0 8px;">Privacy Policy</a> | 
+  <a href="<%= appUrl %>/contact" style="color: #718096; text-decoration: none; font-size: 13px;">Contact Us</a>
+</p>

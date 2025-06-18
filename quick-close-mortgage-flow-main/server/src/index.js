@@ -3,7 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import cron from 'node-cron';
 import authRoutes from './routes/auth.js';
+import rateRoutes from './routes/rateRoutes.js';
+import leadRoutes from './routes/leadRoutes.js';
+import { updateRates } from './services/rateService.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -18,6 +22,32 @@ app.use(cookieParser());
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/api/rates', rateRoutes);
+app.use('/api/leads', leadRoutes);
+
+// Initialize rates
+const initializeRates = async () => {
+  try {
+    await updateRates();
+    console.log('Initial rates loaded successfully');
+  } catch (error) {
+    console.error('Failed to initialize rates:', error);
+  }
+};
+
+// Schedule daily rate updates at 6 AM
+cron.schedule('0 6 * * *', async () => {
+  console.log('Running scheduled rate update...');
+  try {
+    await updateRates();
+    console.log('Scheduled rate update completed');
+  } catch (error) {
+    console.error('Scheduled rate update failed:', error);
+  }
+});
+
+// Initialize rates on server start
+initializeRates();
 
 // Health check
 app.get('/health', (req, res) => {
@@ -25,7 +55,7 @@ app.get('/health', (req, res) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.VITE_MONGODB_URI || 'mongodb://localhost:27017/mortgage-app')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/quick-close-mortgage')
   .then(() => {
     console.log('Connected to MongoDB');
     // Start the server
