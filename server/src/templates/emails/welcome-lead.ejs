@@ -1,0 +1,74 @@
+<% include('emails/base', { 
+  title: 'Welcome to ' + companyName,
+  preview: 'Thank you for starting your mortgage application with us!'
+}); %>
+
+<h2>Welcome to <%= companyName %>, <%= lead.firstName %>!</h2>
+
+<p>Thank you for choosing us for your mortgage needs. We're excited to help you through the home financing process.</p>
+
+<div style="background-color: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin: 20px 0; border-radius: 0 4px 4px 0;">
+  <h3 style="margin-top: 0; color: #0369a1;">Your Application Status: <strong>Received</strong></h3>
+  <p>We've received your application and it's currently under review by our team.</p>
+  <p>Your application ID: <strong>#<%= lead._id.toString().slice(-8).toUpperCase() %></strong></p>
+</div>
+
+<h3>What Happens Next?</h3>
+
+<div style="display: flex; flex-wrap: wrap; margin: 25px 0;
+  <div style="flex: 1; min-width: 200px; margin: 10px 0; padding: 0 15px; border-left: 1px solid #e2e8f0;">
+    <div style="background-color: #e0f2fe; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #0369a1; font-weight: bold;">1</div>
+    <h4 style="margin: 0 0 10px 0; color: #1e40af;">Application Review</h4>
+    <p style="margin: 0; color: #4b5563; font-size: 14px;">Our team is reviewing your application to ensure all information is complete.</p>
+  </div>
+  
+  <div style="flex: 1; min-width: 200px; margin: 10px 0; padding: 0 15px; border-left: 1px solid #e2e8f0;">
+    <div style="background-color: #e0f2fe; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #0369a1; font-weight: bold;">2</div>
+    <h4 style="margin: 0 0 10px 0; color: #1e40af;">Loan Officer Assigned</h4>
+    <p style="margin: 0; color: #4b5563; font-size: 14px;">A dedicated loan officer will be in touch within 24 hours to discuss next steps.</p>
+  </div>
+  
+  <div style="flex: 1; min-width: 200px; margin: 10px 0; padding: 0 15px; border-left: 1px solid #e2e8f0;">
+    <div style="background-color: #e0f2fe; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #0369a1; font-weight: bold;">3</div>
+    <h4 style="margin: 0 0 10px 0; color: #1e40af;">Document Collection</h4>
+    <p style="margin: 0; color: #4b5563; font-size: 14px;">You'll receive a list of required documents to move forward with your application.</p>
+  </div>
+</div>
+
+<div style="background-color: #f8fafc; padding: 20px; border-radius: 4px; margin: 20px 0;">
+  <h3 style="margin-top: 0; color: #1e40af;">Your Next Steps</h3>
+  
+  <div style="display: flex; align-items: flex-start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;">
+    <div style="background-color: #dbeafe; color: #1e40af; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">1</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #1e40af;">Prepare Your Documents</h4>
+      <p style="margin: 0; color: #4b5563; font-size: 14px;">Gather your financial documents, including pay stubs, tax returns, and bank statements.</p>
+    </div>
+  </div>
+  
+  <div style="display: flex; align-items: flex-start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;">
+    <div style="background-color: #dbeafe; color: #1e40af; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">2</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #1e40af;">Check Your Email</h4>
+      <p style="margin: 0; color: #4b5563; font-size: 14px;">Look for an email from your loan officer with next steps and document requests.</p>
+    </div>
+  </div>
+  
+  <div style="display: flex; align-items: flex-start;">
+    <div style="background-color: #dbeafe; color: #1e40af; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">3</div>
+    <div>
+      <h4 style="margin: 0 0 5px 0; color: #1e40af;">Access Your Portal</h4>
+      <p style="margin: 0; color: #4b5563; font-size: 14px;">You'll receive login details for our secure client portal to track your application status.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= appUrl %>/login" class="btn btn-primary">Access Your Account</a>
+</div>
+
+<p>If you have any questions or need assistance, please don't hesitate to contact our support team at <a href="mailto:<%= companyEmail %>" style="color: #3182ce; text-decoration: none;"><%= companyEmail %></a> or call us at <a href="tel:<%= companyPhone.replace(/[^0-9+]/g, '') %>" style="color: #3182ce; text-decoration: none;"><%= companyPhone %></a>.</p>
+
+<p>We're excited to help you with your home financing needs!</p>
+
+<p>Best regards,<br>The <%= companyName %> Team</p>
